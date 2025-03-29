@@ -1,0 +1,244 @@
+{% extends 'catalogo/base.html' %}
+
+{% block title %}Catálogo - Biblioteca{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Encabezado y Búsqueda -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <h1 class="h2 mb-3">Catálogo de Libros</h1>
+                <div class="d-flex gap-3">
+                    <!-- Filtro por Categorías -->
+                    <div class="dropdown">
+                        <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-filter me-2"></i>Categorías
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'catalogo' %}">Todas</a></li>
+                            {% for categoria in categorias %}
+                            <li><a class="dropdown-item" href="{% url 'catalogo' %}?categoria={{ categoria.id }}">
+                                {{ categoria.nombre }}
+                            </a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <!-- Buscador -->
+                    <form class="d-flex" method="GET">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Buscar libros..." name="q" value="{{ query|default:'' }}">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid de Libros -->
+    <div class="row g-4">
+        {% for libro in libros %}
+        <div class="col-md-6 col-lg-4">
+            <div class="libro-card">
+                <!-- Imagen del Libro -->
+                <div class="libro-imagen">
+                    {% if libro.imagen %}
+                    <img src="{{ libro.imagen.url }}" alt="{{ libro.titulo }}">
+                    {% else %}
+                    <div class="imagen-placeholder">
+                        <i class="fas fa-book fa-3x"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                <!-- Información del Libro -->
+                <div class="libro-info">
+                    <h3 class="libro-titulo">{{ libro.titulo }}</h3>
+                    <p class="libro-autor">
+                        <i class="fas fa-user-edit me-2"></i>{{ libro.autor }}
+                    </p>
+                    {% if libro.categoria %}
+                    <span class="libro-categoria">
+                        <i class="fas fa-tag me-1"></i>{{ libro.categoria.nombre }}
+                    </span>
+                    {% endif %}
+                    <p class="libro-descripcion">{{ libro.descripcion|truncatewords:20 }}</p>
+                    <div class="libro-acciones">
+                        <a href="{% url 'detalle_libro' slug=libro.slug %}" class="btn-ver-detalles">
+                            <i class="fas fa-info-circle me-2"></i>Ver Detalles
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>
+                {% if query %}
+                No se encontraron libros que coincidan con tu búsqueda.
+                {% else %}
+                No hay libros disponibles en este momento.
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+/* Estilos para las tarjetas de libros */
+.libro-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.libro-card:hover {
+    transform: translateY(-5px);
+}
+
+.libro-imagen {
+    height: 300px;
+    overflow: hidden;
+    position: relative;
+    background: #f8f9fa;
+}
+
+.libro-imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.libro-card:hover .libro-imagen img {
+    transform: scale(1.05);
+}
+
+.imagen-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #adb5bd;
+}
+
+.libro-info {
+    padding: 1.5rem;
+}
+
+.libro-titulo {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.libro-autor {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.libro-categoria {
+    display: inline-block;
+    padding: 0.25rem 1rem;
+    background: rgba(0,123,255,0.1);
+    color: #007bff;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.libro-descripcion {
+    color: #495057;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+}
+
+.libro-acciones {
+    display: flex;
+    justify-content: center;
+}
+
+.btn-ver-detalles {
+    display: inline-block;
+    padding: 0.5rem 2rem;
+    background: transparent;
+    color: #007bff;
+    border: 1px solid #007bff;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-ver-detalles:hover {
+    background: rgba(0,123,255,0.1);
+    color: #007bff;
+    text-decoration: none;
+}
+
+/* Estilos para los controles */
+.input-group {
+    width: 300px;
+}
+
+.form-control {
+    border-radius: 8px 0 0 8px;
+    border: 1px solid #dee2e6;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: #80bdff;
+}
+
+.btn-primary {
+    border-radius: 0 8px 8px 0;
+}
+
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+.dropdown-item {
+    padding: 0.5rem 1.5rem;
+}
+
+.dropdown-item:hover {
+    background: rgba(0,123,255,0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .libro-imagen {
+        height: 200px;
+    }
+    
+    .libro-info {
+        padding: 1rem;
+    }
+    
+    .libro-titulo {
+        font-size: 1.1rem;
+    }
+    
+    .libro-descripcion {
+        font-size: 0.9rem;
+    }
+    
+    .input-group {
+        width: 100%;
+    }
+}
+</style>
+{% endblock %} 

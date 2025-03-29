@@ -1,0 +1,113 @@
+{% extends 'catalogo/base.html' %}
+
+{% block title %}Biblioteca - Inicio{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Mensaje de Bienvenida -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-10">
+            <div class="welcome-message text-center">
+                <h1 class="display-4 mb-3">¡Bienvenido a nuestra Biblioteca!</h1>
+                <p class="lead text-muted">
+                    Explora nuestra colección de libros y descubre nuevas historias. 
+                    Aquí encontrarás una amplia variedad de géneros para todos los gustos.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <!-- Sección de Libros -->
+        <div class="col-md-6 mb-4">
+            <div class="card-stats">
+                <div class="text-center">
+                    <h1 class="display-1 text-primary fw-bold">{{ total_libros }}</h1>
+                    <h2 class="h4 text-dark mb-4">Libros en la Biblioteca</h2>
+                    <a href="{% url 'catalogo' %}" class="btn-custom">
+                        <i class="fas fa-book me-2"></i>Ver Catálogo
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.welcome-message {
+    padding: 2rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border-radius: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.welcome-message h1 {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.welcome-message .lead {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #6c757d;
+}
+
+.card-stats {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.display-1 {
+    font-size: 4rem;
+    margin-bottom: 0.5rem;
+}
+
+.btn-custom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    border: 1px solid #007bff;
+    border-radius: 8px;
+    color: #007bff;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+    font-weight: 500;
+}
+
+.btn-custom:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+    color: #007bff;
+    text-decoration: none;
+}
+
+.h4 {
+    font-weight: 500;
+    color: #444;
+}
+
+@media (max-width: 768px) {
+    .display-1 {
+        font-size: 3rem;
+    }
+    
+    .card-stats {
+        padding: 1.5rem;
+    }
+
+    .welcome-message {
+        padding: 1.5rem;
+    }
+
+    .welcome-message h1 {
+        font-size: 2rem;
+    }
+
+    .welcome-message .lead {
+        font-size: 1rem;
+    }
+}
+</style>
+{% endblock %} 
